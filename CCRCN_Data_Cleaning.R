@@ -7,37 +7,26 @@
 
 
 # First turn on the necessary libraries to use this script.
-library(dbplyr)
-library(ggplot2)
 library(rmarkdown)
 library(tidyverse)
-library(readr)
-
-# Then, set the working directory to a common file path.
-setwd("F:/SERC Files/Jim Project/Coastal Carbon Survey")
-getwd() # Call the working directory just to double check!
 
 # Upload the dataset into a tibble usig read_csv
-Survey_Responses <- read_csv("F:/SERC Files/Jim Project/CCRCN_Dec2017_Survey_Reponses.csv")
+Survey_Responses <- read_csv("data/CCRCN_survey_results_PII_scrubbed_180316.csv")
 View(Survey_Responses)
-
-# Use the ggplot() function and bind the plot to a specific data frame using the
-# data argument
-ggplot(data = Survey_Responses)
 
 # Change the column names to something easier to call in R; spaces are tricky with names.
 # This step in particular is important because the google doc csv output uses the questions as 
 # column names. These are far too long and need to be changed into something easier to use.
-names(Survey_Responses) <- c("Timestamp", "Email", "Name", "Institution", "Title_Role",
+names(Survey_Responses) <- c("Timestamp", "Institution", "Title_Role",
                              "Spatial_Scale", "Career_milestone", "Work_location", "Data_synthesis",
                              "Data_access", "Make_public?", "Network_support", "Data_kind",
                              "Motivation", "Training_type", "Workshop_interest", "Workshop_idea",
                              "Workshop_worked", "Workshop_avoid", "CWCRP_5", "Feedback_concerns")
 
 
-*************************************** Section 1 Questions ***********************************
+#*************************************** Section 1 Questions ***********************************
 
-1. # Which best describes your role in coastal wetland carbon science?
+#1. # Which best describes your role in coastal wetland carbon science?
       # This question has 4 answers, however, the last answer choice as "other" is
       # a text field where respondents can use their own title. This is useful information
       # to have, but can become overwhelming for analysis. Using the grepl function we will
@@ -45,31 +34,40 @@ names(Survey_Responses) <- c("Timestamp", "Email", "Name", "Institution", "Title
       # these new reformated names into a new column for simplicity's sake.
 
 # Let's write a function to condense the similar responses into a single identifier, we'll start with scientists.
-scientist = grepl("Scientist", Survey_Responses$Title_Role)
-scientists = as.character(scientist)
-Survey_Responses$Student = scientists
-Survey_Responses$Title_Role2 = if_else(Survey_Responses$Student=="TRUE", "Scientist", Survey_Responses$Title_Role)
-# Now we'll cluster Land and Program Manager 
-manager = grepl("Manager", Survey_Responses$Title_Role)
-managers = as.character(manager)
-Survey_Responses$Manager = managers
-Survey_Responses$Title_Role3 = if_else(Survey_Responses$Manager=="TRUE", "Land/Program Manager", Survey_Responses$Title_Role2)
-# Now we'll cluster Policy Experts
-policy = grepl("Policy", Survey_Responses$Title_Role)
-policys = as.character(policy)
-Survey_Responses$Policy = policys
-Survey_Responses$Title_Role4 = if_else(Survey_Responses$Policy=="TRUE", "Policy Expert", Survey_Responses$Title_Role3)
+question_1_response <- Survey_Responses %>% 
+  mutate(scientist = grepl("Scientist", Title_Role),
+         landProgramManager = grepl("Manager", Title_Role),
+         policyExpert = grepl("Policy", Title_Role), 
+         other = if_else(scientist == F & landProgramManager == F & policyExpert == F , T, F)) %>%
+  group_by(scientist, landProgramManager, policyExpert, other) %>% 
+  tally()
 
-# Now lets see if we can make it into only 4 categories by putting everything else into an other category.
-final = grepl("Land|Poli|Scie", Survey_Responses$Title_Role4)
-Final = as.character(final)
-Survey_Responses$Final = Final
-Survey_Responses$Title_Role5 = if_else(Survey_Responses$Final=="TRUE", Survey_Responses$Title_Role4, "Other")
+scientist_count <- sum(question_1_response$n[question_1_response$scientist == T])
+manager_count <- sum(question_1_response$n[question_1_response$landProgramManager == T])
+policy_count <-  sum(question_1_response$n[question_1_response$policyExpert == T])
+other_count <- sum(question_1_response$n[question_1_response$other == T])
+
+question_1_response_b <- data.frame(Title_Role = c("Scientist", "Manager", "Policy", "other"),
+           count = c(scientist_count, manager_count, policy_count, other_count),
+           ranks = 1:4)
+
+question_1_lollipop <- ggplot(question_1_response_b, aes(x=ranks, y = count)) +
+  geom_point(size=3) +
+  geom_segment(aes(x=ranks,
+                   xend=ranks,
+                   y=0,
+                   yend=count)) +
+  xlab("Title") +
+  scale_x_discrete(name = NULL, limits=as.character(question_1_response_b$Title_Role)) +
+  theme_gray()
+
+
 
 # Let's see how it looks now!
-ggplot(data = Survey_Responses, aes(Title_Role5)) +
-  geom_bar()
-table(Survey_Responses$Title_Role5)
+ggplot(data = question_1_response_b, aes(Title_Role)) +
+  geom()
+table(Survey_Responses$Title_Role) +
+
 
 
 2. # Which best describes the spatial scale of your work?
