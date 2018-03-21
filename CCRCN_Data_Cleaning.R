@@ -91,8 +91,73 @@ ggplot(data = Survey_Responses, aes(Work_location)) +
 table(Survey_Responses$Work_location)
 
 
-*************************************** Section 2 Questions **********************************
+#*************************************** Section 2 Questions **********************************
 
-1. # What type of coastal wetland carbon data would you like to see synthesized 
-   # and publically available?
-      # 
+#1. # What type of coastal wetland carbon data would you like to see synthesized 
+# and publically available?
+# This question is simply a text field and will have almost entirely unique
+# answers. Because of this, try to find common words mentioned frequently such
+# as "flux", "stock", "burial" and create some sort of graphic to display
+# these interests. A word cloud is a good idea for instance.
+
+#2. # What is your preferred way of accessing data?
+# Similar to section 1 question 1, this questions has 5 possible answers,
+# with the last being a text field under  "Other". All answers should be coered into
+# one of the 5 fields for simplicity sake.
+
+#3. # Do you have data you would like to make publicly available?
+# This question again has 4 possible answers and a text field for the last answer 
+# choice. However, allof the answers in other are basically maybe... so we'll
+# just coerce all answer choices into yes, no, or maybe.
+
+
+#************************************** Section 3 Questions ***********************************
+
+#1. # Is there any support the network can give you to help with the process of 
+# making your data publicly available?  
+# There are 6 answer choices and they just need to be coded or renamed to 
+# fit on a graph more easily.
+
+
+#************************************** Section 4 Questions ***********************************
+
+#1. # What kind of data are you interested in submitting?
+# Again, try to find common words and make something like a word cloud.
+
+#2. # What is your motivation for archiving your data?
+# All answers need to be coerced into one of the 5 answer choices, with all entries
+# not fitting into the irst 4 classified as "Other". As an added bonus, we can make
+# a word cloud (or other creative representation) from all of the other choices
+# to see if there are any good ideas that weren't listed.
+
+
+#************************************* Section 5 Questions ************************************
+
+#1. # What type of training would improve your capacity as a scientist / 
+# practitioner / policy expert?
+# This can pretty much ust be plotted with a little cleaning up of the title fields.
+
+#2. # Would any of these proposed workshops be of interest to you?
+# Same as above, there are only 3 answer choices so this can just be plotted 
+# pretty easily.
+
+#3. # Do you have an idea for a collaborative workshop with the goal of a 
+# synthesis dataset, model, or and/or publication?
+# Try to identify common words in all of the responses and create something like a word cloud.
+
+#4. # What are some things that have worked about a collaborative workshops you have attended? 
+# Try to identify common words in all of the responses and create something like a word cloud.
+
+#5. # What can make a collaborative workshop ineffective, but can be avoided?
+# Try to identify common words in all of the responses and create something like a word cloud.
+
+
+#************************************* Section 6 Questions *************************************
+
+#1. # Where do you see the state of Coastal Wetland Carbon Research and Practice 
+# in 5 years (10 years)?
+# Maybe just pick out a few that are unique to display.
+
+#2. # Do you have any other feedback or concerns?
+# Coerce some of the long "no" answers into simply "No", and maybe find
+# one really good positive feedback, and one really good negative feedback.
