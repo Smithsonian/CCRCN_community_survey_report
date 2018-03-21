@@ -5,8 +5,7 @@
 
     # Started on March 15, 2018 by Christopher Adkison, SERC Biogeochemistry Intern
 
-# test comment
-# test comment 2
+
 # First turn on the necessary libraries to use this script.
 library(rmarkdown)
 library(tidyverse)
@@ -52,7 +51,8 @@ question_1_response_b <- data.frame(Title_Role = c("Scientist", "Manager", "Poli
            count = c(scientist_count, manager_count, policy_count, other_count),
            ranks = 1:4)
 
-question_1_lollipop <- ggplot(question_1_response_b, aes(x=ranks, y = count)) +
+# Lollipop Graph of Title_Role 
+ggplot(question_1_response_b, aes(x=ranks, y = count)) +
   geom_point(size=3) +
   geom_segment(aes(x=ranks,
                    xend=ranks,
@@ -61,15 +61,14 @@ question_1_lollipop <- ggplot(question_1_response_b, aes(x=ranks, y = count)) +
   xlab("Title") +
   scale_x_discrete(name = NULL, limits=as.character(question_1_response_b$Title_Role)) +
   theme_gray()
+ggplot(question_1_response_b, aes(x=ranks)) +
+  geom_bar()
 
+# From Test Case Barplot
+S1Q1 <- unlist(strsplit(Survey_Responses$Title_Role, ",")) # transform answers with mulpiple options to single coutns
 
-
-# Let's see how it looks now!
-ggplot(data = question_1_response_b, aes(Title_Role)) +
-  geom()
-table(Survey_Responses$Title_Role) +
-
-
+ggplot(data = as.data.frame(S1Q1), aes(x=S1Q1)) +
+  geom_bar()
 
 2. # Which best describes the spatial scale of your work?
       # This question does not have anything too tricky to deal with, so it will 
